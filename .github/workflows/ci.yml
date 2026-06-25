@@ -1,0 +1,76 @@
+name: REC Marketplace CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # --- Rust / Soroban CI ---
+  contracts_ci:
+    name: Contracts CI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+          components: clippy, rustfmt
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Check Formatting
+        run: cargo fmt --all -- --check
+
+      - name: Run Clippy
+        run: cargo clippy -- -D warnings
+
+      - name: Run Tests
+        run: cargo test --all-features
+
+      - name: Build Contracts
+        run: cargo build --target wasm32-unknown-unknown --release
+
+  # --- Frontend CI ---
+  frontend_ci:
+    name: Frontend CI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-index: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run Lint
+        run: npm run lint
+
+      - name: Build Application
+        run: npm run build
+        env:
+          NEXT_PUBLIC_MARKETPLACE_CONTRACT_ID: C...
+          NEXT_PUBLIC_REGISTRY_CONTRACT_ID: C...
+          NEXT_PUBLIC_STELLAR_NETWORK: testnet
+
+  # --- Documentation ---
+  docs:
+    name: Sustainability Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate Code Tree
+        run: tree -I 'node_modules|target' > codetree.txt
+      - name: Archive Code Tree
+        uses: actions/upload-artifact@v4
+        with:
+          name: project-structure
+          path: codetree.txt

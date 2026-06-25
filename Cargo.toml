@@ -1,0 +1,9 @@
+[workspace]
+resolver = "2"
+members = [
+    "contracts/rec_marketplace",
+    "contracts/rec_registry",
+]
+
+[workspace.dependencies]
+soroban-sdk = { version = "21.7.6" }
