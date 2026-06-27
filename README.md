@@ -64,4 +64,12 @@ Use the provided PowerShell script for automated deployment:
 -   **Audit**: Every transaction is atomic; payments only release when REC ownership successfully transfers.
 
 ## 📄 License
+
+## 🔗 Deployment Metadata
+
+- **REC Marketplace Contract Address**: CBM67F3IGJB4Z6T5BTXWMIOHZW53KZERDDNHORLZNUGUBNFWQOWIYJW6
+- **REC Registry Contract Address**: `Not deployed yet`
+- **Transaction Hash**: `TRANSACTION_HASH_PLACEHOLDER`
+- **Demo Video**: `DEMO_VIDEO_LINK_PLACEHOLDER`
+- **Live Demo**: `LIVE_DEMO_PLACEHOLDER`
 MIT © 2024 REC Marketplace Team
